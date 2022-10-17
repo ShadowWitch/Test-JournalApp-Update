@@ -1,25 +1,36 @@
 
-import {Link as RouterLink} from 'react-router-dom';
-import { Google } from '@mui/icons-material';
-import { Grid, TextField, Typography, Button, Link } from '@mui/material';
+import {Link as RouterLink, Navigate} from 'react-router-dom';
+import { FormatColorReset, Google } from '@mui/icons-material';
+import { Grid, TextField, Typography, Button, Link, Alert } from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../globalhooks/useForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { chekingAuthentication, startGoogleSignIn } from '../../store/auth';
+import { startGoogleSignIn, startLoginWithEmailPassword } from '../../store/auth';
 import { useEffect, useMemo, useState } from 'react';
+
+
+
+const formData = {
+  email: '',
+  password: '',
+}
+
+const formValidations = {
+  email: [ (value) => value.includes('@'), 'El correo debe tener una @' ],
+  password: [ (value) => value.length >= 6, 'El password debe de tener mas de 6 letras.' ],
+}
 
 export const LoginPage = () => {
   const dispatch = useDispatch()
   
-  const {status} = useSelector(state => state.auth)
+  const {status, errorMessage} = useSelector(state => state.auth)
 
-  const {email, password, onInputChange, formState} = useForm({
-    email: 'example@gmail.com',
-    password: '123123'
-  })
+  const {email, password, onInputChange, formState, isFormValid, emailValid, passwordValid} = useForm(formData, formValidations)
 
   // Si el "status" cambia, se volvera a tener el nuevo valor y si NO cambia no... Como vemos usamos "useMemo" ya que queremos "memorizar" el valor de "true" (en este caso) cada vez que "status" cambie (y luego volvera a "false" si no se cumplen la condicion de "state === checking")
   const isAuthenticated = useMemo(() => status === 'checking', [status])
+
+  const [formSubmited, setFormSubmited] = useState(false)
 
   /*
   // ============== Esta es MI manera de hacerlo sin "useMemo" ==============
@@ -35,10 +46,28 @@ export const LoginPage = () => {
   */
   
 
+  // ==================== ACAAAA PROBANDO REDIRECIONAR AL USER ====================
+ // YA ESTA IMPLEMENTADA LA PARTE DEL LOGIN
+ 
+  useEffect(() => {
+    if(status === 'authenticated'){
+      <Navigate to='/' />
+    }
+  }, [status])
+
+  // ==================================================
+
+
+
   const onSubmit = (e) =>{
     e.preventDefault()
 
-    dispatch(chekingAuthentication())
+    setFormSubmited(true)
+    if(!isFormValid) return;
+
+    // dispatch(chekingAuthentication())
+    console.log('Es valido', formState)
+    dispatch(startLoginWithEmailPassword(formState))
     // console.log({email, password})
   }
 
@@ -60,6 +89,8 @@ export const LoginPage = () => {
               fullWidth
               name='email'
               onChange={onInputChange}
+              error={!!emailValid && formSubmited}              
+              helperText={emailValid}
             />
           </Grid>
 
@@ -71,10 +102,21 @@ export const LoginPage = () => {
               fullWidth
               name='password'
               onChange={onInputChange}
+              error={!!passwordValid && formSubmited}              
+              helperText={passwordValid}
             />
           </Grid>
 
           <Grid container spacing={2} sx={{mb: 2, mt: 1}}>
+
+          {/* Si vienen datos (!!errorMessage) pues muestralo, de lo contrario NO */}
+            <Grid item xs={12} sm={12} display={!!errorMessage ? '' : 'none'} >
+
+              <Alert severity='error' >
+                {errorMessage}
+              </Alert>
+
+            </Grid>
 
             <Grid item xs={12} sm={6}>
 
