@@ -77,8 +77,9 @@ export const loginWithEmailPassword = async ({email, password}) => {
     // signInWithEmailAndPassword
     try {
         const resp = await signInWithEmailAndPassword(FirebaseAuth, email, password)
-        console.log(resp)
+        // console.log(resp)
         const { accessToken, displayName, photoURL, uid } = resp.user
+        // console.log('RESPP >> ', resp)
 
         return {
             ok: true,
@@ -101,7 +102,13 @@ export const loginWithEmailPassword = async ({email, password}) => {
             errorMessage
         }
     }
+}
+
+export const logoutFirebase = async () => {
+
+    return await FirebaseAuth.signOut() // "signOut()" cierra la sesion de todo (Google, Correo con Email y password, etc)
 
 }
+
 
 

@@ -1,5 +1,5 @@
 
-import {Link as RouterLink, Navigate} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import { FormatColorReset, Google } from '@mui/icons-material';
 import { Grid, TextField, Typography, Button, Link, Alert } from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
@@ -7,8 +7,6 @@ import { useForm } from '../../globalhooks/useForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { startGoogleSignIn, startLoginWithEmailPassword } from '../../store/auth';
 import { useEffect, useMemo, useState } from 'react';
-
-
 
 const formData = {
   email: '',
@@ -49,11 +47,13 @@ export const LoginPage = () => {
   // ==================== ACAAAA PROBANDO REDIRECIONAR AL USER ====================
  // YA ESTA IMPLEMENTADA LA PARTE DEL LOGIN
  
-  useEffect(() => {
-    if(status === 'authenticated'){
-      <Navigate to='/' />
-    }
-  }, [status])
+  // const navigate = useNavigate()
+
+  // useEffect(() => {
+  //   if(status === 'authenticated'){
+  //     navigate('/', {replace: true})
+  //   }
+  // }, [status])
 
   // ==================================================
 
@@ -66,7 +66,7 @@ export const LoginPage = () => {
     if(!isFormValid) return;
 
     // dispatch(chekingAuthentication())
-    console.log('Es valido', formState)
+    // console.log('Es valido', formState)
     dispatch(startLoginWithEmailPassword(formState))
     // console.log({email, password})
   }
