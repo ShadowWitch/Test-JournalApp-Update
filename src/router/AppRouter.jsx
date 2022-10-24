@@ -6,13 +6,16 @@ import { CheckingAuth } from "../ui/components"
 
 export const AppRouter = ( ) => {
 
+  // console.log('ROUTER')
+
   const {status} = useCheckAuth();
 
   if(status === 'checking'){
     return <CheckingAuth />
   }
 
-  console.log('>> ', status)
+  // console.log('>> ', status)
+  
 
   return (
     // Otra manera de proteger rutas

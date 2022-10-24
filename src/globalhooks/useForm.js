@@ -7,8 +7,16 @@ export const useForm = ( initialForm = {}, formValidations = {} ) => {
     const [formValidation, setFormValidation] = useState({})
 
     useEffect(() => {
+        // console.log('validator')
       createValidators()
     }, [formState])
+
+    useEffect(() => {
+        // console.log('IniTIAL')
+        setFormState(initialForm)
+        // onResetForm()
+    }, [initialForm]) // Cada vez que cambie el valor del estado que se resetee el "form"
+      
     
     // "useMemo" para que solo se ejecute cuando el "formValidation" cambie
     const isFormValid = useMemo(() => {

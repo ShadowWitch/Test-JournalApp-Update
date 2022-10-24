@@ -5,10 +5,11 @@ import { SideBar } from "../components/SideBar";
 
 export const JournalLayout = ( {children} ) => {
 
-  const drawerWidth = 210; // Solo es para establecerle un largo al menu
+  const drawerWidth = 270; // Solo es para establecerle un largo al menu
 
+  // console.log('DEsde layout')
   return (
-    <Box sx={{display: 'flex'}}>
+    <Box sx={{display: 'flex'}} className='animate__animated animate__fadeIn animate__faster'>
         <Navbar drawerWidth={drawerWidth} />
 
         <SideBar drawerWidth={drawerWidth} />
